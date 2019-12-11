@@ -26,7 +26,21 @@
 \end{frame}
 
 \begin{frame}{Who am I?}
-
+			\centering \alert{Dawid Pilarski}
+			\vskip 1em
+	\begin{columns}[onlytextwidth]
+		\begin{column}{0.7\textwidth}
+			\begin{itemize}
+				\item Senior Software Developer in TomTom
+				\item Member of the ISO/JTC1/SC22/WG21
+				\item Member of the PKN KT {\tiny(programming languages)}
+				\item C++ blog writer
+			\end{itemize}
+		\end{column}
+		\begin{column}{0.29\textwidth}
+				\includegraphics[width=\linewidth]{Dawid_Pilarski.jpg}				
+		\end{column}	
+	\end{columns}
 \end{frame}
 
 \begin{frame}{Questions.}
@@ -45,7 +59,7 @@
 \end{frame}
 
 
-\section{What does the title mean?}
+\section{Theory}
 
 \begin{frame}{Title decomposition}
 
@@ -94,21 +108,42 @@ Objects are:
 	\only{\centering\inputminted{\myCpp}{examples/union-active-member-change.cpp}}<3>
 	\only{\centering\inputminted{\myCpp}{examples/temporary-creation.cpp}}<4>
 	\end{column}
-\end{columns}
 
+\end{columns}
 
 \end{frame}
 
+
+\newcounter{tmpCounter}
 \begin{frame}{The object}
+
+\begin{columns}
+\begin{column}{0.3\linewidth}
 
 Has:
 \begin{itemizeSeq}
 	\item optional name
 	\item storage and it's duration
+	\begin{itemizeSeq}
+		\item static
+		\item thread
+		\item automatic
+		\item dynamic
+	\end{itemizeSeq}
 	\item lifetime
 	\item type
 \end{itemizeSeq}
 
+\end{column}
+
+\begin{column}{0.5\linewidth}
+\only{\alert{program duration}}<3>
+\only{\alert{thread duration}}<4>
+\only{\alert{enclosing scope duration}}<5>
+\only{\alert{controlled by user}}<6>
+\end{column}
+
+\end{columns}
 \end{frame}
 
 \begin{frame}{The object}
@@ -117,9 +152,44 @@ Has:
 
 \end{frame}
 
-\begin{frame}{The variable}
+\begin{frame}[fragile]{The variable}
 
-\centerline{Can be either an object or the reference. \pause\alert{Is introduced by a declaration.}}
+\centerline{Is created by a \alert{declaration} of an \alert{object} or the \alert{reference}.}
+\pause
+\vfill
+
+\begin{columns}[t]
+
+\begin{column}{0.3\linewidth}
+\begin{minted}{\myCpp}
+int x;
+\end{minted}
+\vskip 1cm
+Is a variable.
+
+\end{column}
+\pause
+
+\begin{column}{0.3\linewidth}
+\begin{minted}{\myCpp}
+int& x = ...
+\end{minted}
+\vskip 1cm
+Is variable.
+
+\end{column}
+\pause
+
+\begin{column}{0.3\linewidth}
+\begin{minted}{\myCpp}
+struct X{int z;}x;
+\end{minted}
+\vskip 1cm
+Neither \texttt{X} nor \texttt{z} are variables.\\
+\texttt{x} is a variable.
+\end{column}
+
+\end{columns}
 
 \end{frame}
 
@@ -130,15 +200,17 @@ Has:
 \begin{tikzpicture}
 \begin{scope}[blend group=soft light]
 
-\fill[blue!30!white] (0,0) circle[x radius=4cm, y radius=2cm];
-\fill[green!60!white] (-3,-1) circle[x radius=2cm, y radius=1.5cm];
-\fill[orange!60!white] (3,-1) circle[x radius=2cm, y radius=1.5cm];
+\fill[blue!30!white] (-2.2,-0.25) circle[x radius=1cm, y radius=0.5cm];
+\fill[blue!30!white] (2.2,-0.25) circle[x radius=1cm, y radius=0.5cm];
+\fill[green!60!white] (-2.2,-1) circle[x radius=2cm, y radius=1.5cm];
+\fill[orange!60!white] (2.2,-1) circle[x radius=2cm, y radius=1.5cm];
 
 \end{scope}
 
-\node at(0,1){Variables};
-\node at(3,-1){References};
-\node at(-3,-1){Objects};
+\node at(-2.2,-0.25){Variables};
+\node at(2.2,-0.25){Variables};
+\node at(2.2,-1){References};
+\node at(-2.2,-1){Objects};
 
 \end{tikzpicture}}
 
@@ -178,18 +250,14 @@ Has:
 \draw [decorate, decoration={brace, amplitude=5pt}] (0, -1) -- (0, -2) node[xshift=1.35cm ,midway, text width=2cm]{\footnotesize object under destruction};;
 
 \end{tikzpicture}
-\end{frame}
-
-\begin{frame}{What is lifetime?}
-
+\vfill
 \centerline{During the lifetime of an object you can use it without additional restrictions.}
 
 \end{frame}
 
+\begin{frame}{When does the lifetime start?}
 
-\begin{frame}{When the lifetime starts}
-
-\centerline{The lifetime of an object starts, when:}
+\centerline{The lifetime of an object \alert{starts}, when:}
 
 \begin{itemizeSeq}
 
@@ -200,15 +268,64 @@ Has:
 \end{itemizeSeq}
 \end{frame}
 
+\begin{frame}{When does the lifetime end?}
+
+\centerline{The lifetime of an object \alert{ends}, when:}
+
+\begin{itemizeSeq}
+
+\item object is destroyed (for non class types),
+\item destructor is called (for the class types), or
+\item storage occupied by an object is reused or released.
+
+\end{itemizeSeq}
+\end{frame}
+
+\section{Object model intuition}
+
 \begin{frame}{Vacuous initialization and trivial types}
 
 You need to create a variable, even if you do not think so (additional copy)
 
 \end{frame}
 
+\begin{frame}{TBAA}
+
+\end{frame}
+
 \begin{frame}{How to fix above}
 
 Richard's changes to the implicit object creation.
+
+\end{frame}
+
+\section{Beyond the object lifetime.}
+
+\begin{frame}{Before birth}
+
+\end{frame}
+
+\begin{frame}{Delayed members initialization}
+
+\end{frame}
+
+\begin{frame}{Concurrent access and vptr}
+
+\end{frame}
+
+\begin{frame}{dynamic\_cast and type\_id}
+
+\end{frame}
+
+\begin{frame}{Afterlife}
+
+\end{frame}
+
+\begin{frame}{vptr and synchronization in the destructor}
+
+\end{frame}
+
+\begin{frame}{Immortality}
 
 \end{frame}
 
