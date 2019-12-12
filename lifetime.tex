@@ -19,8 +19,6 @@
 	\maketitle
 \end{frame}
 
-\section*{Introduction}
-
 \begin{frame}{Agenda}
 	\tableofcontents
 \end{frame}
@@ -48,6 +46,12 @@
 	\vfill
 	\centerline{Questions...}
 	\vfill
+
+\end{frame}
+
+\begin{frame}{Question...}
+
+\centerline{Do you think we are going to talk about \alert{basics}?}
 
 \end{frame}
 
@@ -283,19 +287,77 @@ Neither \texttt{X} nor \texttt{z} are variables.\\
 
 \section{Object model intuition}
 
-\begin{frame}{Vacuous initialization and trivial types}
+\begin{frame}{The usual mindset towards object}
 
-You need to create a variable, even if you do not think so (additional copy)
+\begin{itemizeSeq}
+\item We have got a memory
+\item Objects are the way to represent value in that memory
+\end{itemizeSeq}
+
+
+TODO: Examples/illustrations
 
 \end{frame}
 
-\begin{frame}{TBAA}
+\begin{frame}{Examples of invalid C++}
+
+TODO: example with reinterpret\_casting piece of memory to the object
+
+TODO: example with type punning on unions
 
 \end{frame}
 
-\begin{frame}{How to fix above}
+\begin{frame}{Special case, when it's correct}
 
-Richard's changes to the implicit object creation.
+TODO example with 2 standard layout structs
+
+\end{frame}
+
+\begin{frame}{Compiler thinks in terms of objects and types}
+
+Why above is wrong?
+because the title
+
+\end{frame}
+
+\begin{frame}{Assumptions, that compiler does}
+
+examples with assembly why this assumption is important
+
+\end{frame}
+
+\begin{frame}{More examples with wrong usages}
+
+\end{frame}
+
+\begin{frame}{std::launder}
+
+\end{frame}
+
+\begin{frame}{Evolution of the rules}
+
+pre C++11 (make sure it's correct).
+
+Cannot create object in the same type in the same place as previous object
+
+\end{frame}
+
+\begin{frame}{Evolution of the rules}
+After C++ 11 (check)
+
+You can create an object of the same type as long as there are no references and const objects
+
+\end{frame}
+
+\begin{frame}{Evolution of the rules}
+
+Since C++20
+
+You can create object of the same type.
+
+\end{frame}
+
+\begin{frame}{Implicit object creation in C++20}
 
 \end{frame}
 
