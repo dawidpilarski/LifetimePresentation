@@ -51,7 +51,7 @@
 
 \begin{frame}{Question...}
 
-\centerline{Do you think we are going to talk about \alert{basics}?}
+\centerline{Do you think, that understanding objects and their lifetimes is \alert{basics}?}
 
 \end{frame}
 
@@ -80,7 +80,7 @@
 
 \begin{frame}{The object}
 
-Objects are:
+Objects are entities, that can be:
 \begin{itemize}
 	\item created
 	\item destroyed
@@ -127,6 +127,7 @@ Objects are:
 Has:
 \begin{itemizeSeq}
 	\item optional name
+	\item lifetime
 	\item storage and it's duration
 	\begin{itemizeSeq}
 		\item static
@@ -134,8 +135,8 @@ Has:
 		\item automatic
 		\item dynamic
 	\end{itemizeSeq}
-	\item lifetime
 	\item type
+	\item value
 \end{itemizeSeq}
 
 \end{column}
@@ -150,9 +151,11 @@ Has:
 \end{columns}
 \end{frame}
 
-\begin{frame}{The object}
+\begin{frame}{The reference}
 
-\centerline{Is not a reference {\scriptsize(although reference has lifetime)}}
+\centerline{Is not an object {\scriptsize(although reference has lifetime)}}
+
+\centerline{\footnotesize functions are not objects as well}
 
 \end{frame}
 
@@ -223,8 +226,8 @@ Neither \texttt{X} nor \texttt{z} are variables.\\
 \end{frame}
 
 
-\begin{frame}{Summary: variable, reference, object}
-	Just in case you want to check validity with the \href{http://cppreference.com}{\alert{cppreference}}:
+\begin{frame}{Definitions}
+	If you want to get precise definitions, you need to look at standard draft. In case of \href{http://cppreference.com}{\alert{cppreference}}:
 
 	\begin{itemizeSeq}
 		\item The object has been recently updated.
@@ -277,16 +280,16 @@ Neither \texttt{X} nor \texttt{z} are variables.\\
 
 \begin{frame}{When does the lifetime end?}
 
-\centerline{The lifetime of an object \alert{ends}, when:}
+\centerline{The lifetime of an object \alert{ends}:}
 
 \begin{description}[<+-|alert@+>]
 
 \item[class types] when it's destructor is called,
-\item[non-class types] when we expect it to end it's lifetime, 
+\item[non-class types] when we expect it to end its lifetime, 
 \begin{itemize}
 	\item when object exits the scope,
 	\item delete expression,
-	\item when temporary ends it's lifetime etc.
+	\item when temporary ends its lifetime etc.
 \end{itemize}
 \item[any type] when storage occupied by an object is reused or released.
 \end{description}
@@ -384,7 +387,84 @@ Neither \texttt{X} nor \texttt{z} are variables.\\
 
 \begin{frame}{Assumptions, that compiler does}
 
-examples with assembly why this assumption is important
+\begin{columns}[t]
+
+\begin{column}{0.58\linewidth}
+
+
+\centerline{Code:}
+
+\vfill
+
+\inputminted[firstline=9]{\myCpp}{examples/TBAA-simple-example.cpp}
+
+\end{column}
+
+
+\begin{column}{0.28\linewidth}
+
+\centerline{Assembly:}
+
+\vfill
+
+\centering\inputminted{gas}{examples/TBAA-simple-example.asm}
+
+\end{column}
+
+\end{columns}
+
+\end{frame}
+
+\begin{frame}{Assumptions, that compiler does}
+
+\begin{columns}[t]
+
+\begin{column}{0.58\linewidth}
+
+
+\centerline{Code:}
+
+\vfill
+
+\inputminted[firstline=5]{\myCpp}{examples/Non-TBAA-simple-example.cpp}
+
+\end{column}
+
+
+\begin{column}{0.28\linewidth}
+
+\centerline{Assembly:}
+
+\vfill
+
+\centering\inputminted{gas}{examples/Non-TBAA-simple-asembly.asm}
+
+\end{column}
+
+\end{columns}
+
+\end{frame}
+
+\begin{frame}{Conclusion}
+
+We cannot allow 2 different objects (not subobjects) live:
+
+\begin{itemize}
+	\item in the same space.
+	\item at the same time.
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}{Explanations: type punning in union}
+
+\inputminted{\myCpp}{examples/invalid_union_use.cpp}
+
+\end{frame}
+
+\begin{frame}{How to do it right?}
+
+
 
 \end{frame}
 

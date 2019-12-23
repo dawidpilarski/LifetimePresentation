@@ -10,6 +10,6 @@ union color{
   uint32_t as_int;
 };
 
-color c = {255, 120, 0};
+color c = {255, 120, 0, 50};
 display(c.as_int);
 
