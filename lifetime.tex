@@ -142,10 +142,10 @@ Has:
 \end{column}
 
 \begin{column}{0.5\linewidth}
-\only{\alert{program duration}}<3>
-\only{\alert{thread duration}}<4>
-\only{\alert{enclosing scope duration}}<5>
-\only{\alert{controlled by user}}<6>
+\only{\alert{program duration}}<4>
+\only{\alert{thread duration}}<5>
+\only{\alert{enclosing scope duration}}<6>
+\only{\alert{controlled by user}}<7>
 \end{column}
 
 \end{columns}
@@ -274,7 +274,7 @@ Neither \texttt{X} nor \texttt{z} are variables.\\
 
 \end{itemizeSeq}
 
-\only{\alert{*In case of default construction of trivial type, there is no initialization performed}}<2>
+\uncover<2>{\alert{*In case of default construction of trivial type, there is no initialization performed}}
 
 \end{frame}
 
@@ -464,7 +464,7 @@ We cannot allow 2 different objects (not subobjects) live:
 
 \begin{frame}{How to do it right?}
 
-
+\inputminted{\myCpp}{examples/invalid_union_use_right.cpp}
 
 \end{frame}
 
