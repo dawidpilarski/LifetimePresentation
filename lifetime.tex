@@ -458,7 +458,24 @@ We cannot allow 2 different objects (not subobjects) live:
 
 \begin{frame}{Explanations: type punning in union}
 
+\begin{columns}
+
+\begin{column}{0.48\linewidth}
 \inputminted{\myCpp}{examples/invalid_union_use.cpp}
+\end{column}
+\begin{column}{0.48\linewidth}
+
+\centerline{\alert{errors:}}
+
+\begin{itemizeSeq}
+\item Accessing inactive member of union,
+\item Reading not existing object.
+\end{itemizeSeq}
+
+\end{column}
+
+\end{columns}
+
 
 \end{frame}
 
@@ -466,40 +483,193 @@ We cannot allow 2 different objects (not subobjects) live:
 
 \inputminted{\myCpp}{examples/invalid_union_use_right.cpp}
 
-\end{frame}
+\pause
 
-\begin{frame}{More examples with wrong usages}
-
-\end{frame}
-
-\begin{frame}{std::launder}
+Additional benefit: \alert{No endianess issue here!}
 
 \end{frame}
 
-\begin{frame}{Evolution of the rules}
+\begin{frame}{Explanations: reading from a stream}
 
-pre C++11 (make sure it's correct).
+\begin{columns}[t]
 
-Cannot create object in the same type in the same place as previous object
+\begin{column}{0.48\linewidth}
+\inputminted{\myCpp}{examples/invalid-reinterpret-cast.cpp}
+\end{column}
 
-\end{frame}
+\begin{column}{0.48\linewidth}
+\centerline{\alert{errors:}}
 
-\begin{frame}{Evolution of the rules}
-After C++ 11 (check)
+\begin{itemizeSeq}
+\item reading object of type T, that was not created
+\end{itemizeSeq}
+\end{column}
 
-You can create an object of the same type as long as there are no references and const objects
-
-\end{frame}
-
-\begin{frame}{Evolution of the rules}
-
-Since C++20
-
-You can create object of the same type.
+\end{columns}
 
 \end{frame}
 
-\begin{frame}{Implicit object creation in C++20}
+\begin{frame}{How to do it right?}
+
+\inputminted{\myCpp}{examples/invalid-reinterpret-cast-right.cpp}
+
+\end{frame}
+
+\begin{frame}{Or with C++20}
+\inputminted{\myCpp}{examples/invalid-reinterpret-cast-right-modern.cpp}
+\end{frame}
+
+\begin{frame}{Explanations: reading from a stream - placement new}
+
+\begin{columns}
+
+\begin{column}{0.48\linewidth}
+
+\inputminted{\myCpp}{examples/invalid_reinterpret_cast-2.cpp}
+\end{column}
+
+\begin{column}{0.48\linewidth}
+
+\begin{itemizeSeq}
+\item placement new reuses the storage (ends lifetime of buff),
+\item value is a runtime property of an object (doesn't exist outside of it's lifetime)
+\item T is created uninitialized
+\item reading T is reading indeterminate value, which is UB
+\end{itemizeSeq}
+
+\end{column}
+\end{columns}
+\end{frame}
+
+\section*{std::launder}
+
+\begin{frame}{Tricky placement new}
+
+\begin{columns}
+
+\begin{column}{0.48\linewidth}
+\inputminted{\myCpp}{examples/placement-new-issue.cpp}
+\end{column}
+
+\begin{column}{0.48\linewidth}
+\begin{itemizeSeq}
+\item sometimes you know, there is an object of given type under given address.
+\item but you cannot just \texttt{reinterpret\_cast} the pointer to get to the object.
+\end{itemizeSeq}
+\end{column}
+\end{columns}
+\end{frame}
+
+\begin{frame}{What's the solution to the problem?}
+
+\begin{description}[<+-|alert@+>]
+\item[Until C++14] No solution. Go on with UB.
+\item[Since C++17] \texttt{std::launder}.
+\end{description}
+
+\end{frame}
+
+\begin{frame}[fragile]{What is std::launder?}
+\centerline{Reading \alert{cppreference}:}
+
+\begin{minted}{\myCpp}
+template <class T>
+constexpr T* launder(T* p) noexcept;
+\end{minted}
+
+\pause
+
+\only{Obtains a pointer to the object located at the address represented by p.}<2>
+\only{Obtains a \alert{pointer to the object} located at the address represented by p.}<3> 
+\end{frame}
+
+\begin{frame}{Usage of std::launder}
+
+\inputminted{\myCpp}{examples/placement-new-launder.cpp}
+
+\end{frame}
+
+\begin{frame}{Other use-cases of the std::launder}
+
+\inputminted{\myCpp}{examples/non-assignable-launder.cpp}
+
+Is this code valid? (drawings)
+
+\end{frame}
+
+\begin{frame}{Rules for placement new for such cases}
+
+\centerline{\alert{You can do placement new on old object.}}
+\pause
+\centerline{\alert{Not always we can use original object (until C++20). For example:}}
+
+\begin{itemizeSeq}
+\item We cannot use original object when it has:
+\begin{itemizeSeq}
+\item references
+\item const members
+\end{itemizeSeq}
+\end{itemizeSeq}
+
+\end{frame}
+
+\begin{frame}{Example: const member or reference}
+
+\inputminted{\myCpp}{examples/non-assignable-launder-bad.cpp}
+
+\end{frame}
+
+\begin{frame}{Example: standard layout types}
+
+\inputminted{\myCpp}{examples/non-assignable-launder-good.cpp}
+
+\end{frame}
+
+\section*{Implicit object creation}
+
+\begin{frame}{Implicit object creation}
+Until C++20 there is one case of implicit object creation:
+\vskip 2em
+\centerline{\alert{for defaulted, trivial assignment operators of union members.}}
+
+\pause 
+
+\vfill
+
+What does that mean?
+
+\end{frame}
+
+\begin{frame}{Implicit object creation for unions}
+
+\inputminted{\myCpp}{examples/implicit-obj-creation-unions.cpp}
+
+\end{frame}
+
+\begin{frame}{Implicit object creation for unions}
+
+\inputminted{\myCpp}{examples/implicit-obj-creation-unions-nondefault.cpp}
+
+\end{frame}
+
+\begin{frame}{Implicit object creation for C++20}
+
+Implicit object creation in the C++20 will be extended for:
+
+\begin{itemizeSeq}
+
+\item malloc-like functions
+\item memcpy, memmove
+\item operator new
+\item std::allocator<T>::allocate
+\item creation of arrays of:
+\begin{itemizeSeq}
+	\item char
+	\item unsigned char
+	\item std::byte
+\end{itemizeSeq}
+
+\end{itemizeSeq}
 
 \end{frame}
 
