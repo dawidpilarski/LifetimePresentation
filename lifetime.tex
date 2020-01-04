@@ -93,7 +93,7 @@ Objects are entities, that can be:
 
 \begin{frame}{The Object}
 
-\begin{columns}[T]
+\begin{columns}
 	\begin{column}{0.58\linewidth}
 	
 	Is created:
@@ -654,22 +654,42 @@ What does that mean?
 
 \begin{frame}{Implicit object creation for C++20}
 
+\begin{columns}
+
+\begin{column}{0.45\linewidth}
+
+
 Implicit object creation in the C++20 will be extended for:
 
 \begin{itemizeSeq}
 
 \item malloc-like functions
-\item memcpy, memmove
 \item operator new
 \item std::allocator<T>::allocate
+\item memcpy, memmove
 \item creation of arrays of:
-\begin{itemizeSeq}
+\begin{itemize}[<5->]
 	\item char
 	\item unsigned char
 	\item std::byte
-\end{itemizeSeq}
+\end{itemize}
 
 \end{itemizeSeq}
+
+\end{column}
+
+\begin{column}{0.55\linewidth}
+
+\only{\inputminted{\myCpp}{examples/implicit-obj-creation-malloc.cpp}}<1>
+\only{\inputminted{\myCpp}{examples/implicit-obj-creation-new.cpp}}<2>
+\only{\inputminted{\myCpp}{examples/implicit-obj-creation-alloc.cpp}}<3>
+\only{\inputminted{\myCpp}{examples/implicit-obj-creation-memcpy.cpp}}<4>
+\only{\inputminted{\myCpp}{examples/implicit-obj-creation-array.cpp}}<5>
+
+\end{column}
+
+\end{columns}
+
 
 \end{frame}
 
