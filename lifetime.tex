@@ -695,31 +695,116 @@ Implicit object creation in the C++20 will be extended for:
 
 \section{Beyond the object lifetime.}
 
-\begin{frame}{Before birth}
+\begin{frame}{Lifetime}
 
-\end{frame}
+\begin{columns}
+\begin{column}{0.58\linewidth}
+\begin{tikzpicture}
 
-\begin{frame}{Delayed members initialization}
+\draw[fill=blue!30!white] (-.75, -2) rectangle (-0.1, 2);
+
+\draw[dashed] (-1, 1) -- (2.5, 1);
+\draw[dashed] (-1, -1) -- (2.5, -1);
+
+\only{\draw [decorate, decoration={brace, amplitude=5pt}] (0, 2) -- (0, 1) node[xshift=1.35cm ,midway, text width=2cm]{\footnotesize \alert{object under construction}}}<1>;
+\only{\draw [decorate, decoration={brace, amplitude=5pt}] (0, 2) -- (0, 1) node[xshift=1.35cm ,midway, text width=2cm]{\footnotesize object under construction}}<2->;
+
+\only{\draw [decorate, decoration={brace, amplitude=5pt}] (0, 1) -- (0,-1) node[xshift=1.35cm ,midway, text width=2cm]{\footnotesize \alert{lifetime}}}<2>;
+\only{\draw [decorate, decoration={brace, amplitude=5pt}] (0, 1) -- (0,-1) node[xshift=1.35cm ,midway, text width=2cm]{\footnotesize lifetime}}<3->;
+\only{\draw [decorate, decoration={brace, amplitude=5pt}] (0, -1) -- (0, -2) node[xshift=1.35cm ,midway, text width=2cm]{\footnotesize \alert{object under destruction}}}<3>;
+
+\end{tikzpicture}
+\end{column}
+\begin{column}{0.38\linewidth}
+
+\only{Not for \alert{\texttt{trivially\_constructible}} types}<1>
+\only{Not for \alert{\texttt{trivially\_destructible}} types. Optional for other types.}<3>
+
+\end{column}
+\end{columns}
 
 \end{frame}
 
 \begin{frame}{Concurrent access and vptr}
 
+\inputminted{\myCpp}{examples/vptr-vcall.cpp}
+
+\end{frame}
+
+\begin{frame}{Concurrent access and vptr}
+
+\inputminted{\myCpp}{examples/vptr-vcall-dtor.cpp}
+
+\end{frame}
+
+\begin{frame}{Avoid synchronisation in dtors}
+
+\inputminted{\myCpp}{examples/dtors-sync.cpp}
+
+\end{frame}
+
+\begin{frame}{Summary}
+
+\centerline{\alert{Do not call virtual functions beyond the lifetime of an object!}}
+
 \end{frame}
 
 \begin{frame}{dynamic\_cast and type\_id}
 
-\end{frame}
-
-\begin{frame}{Afterlife}
+\texttt{\alert{Dynamic cast}} and \texttt{\alert{typeid}} cannot be used during construction or destruction if they don't refer to the base or current objects. 
 
 \end{frame}
 
-\begin{frame}{vptr and synchronization in the destructor}
+\begin{frame}{dynamic\_cast and type\_id examples}
+
+\inputminted[fontsize=\footnotesize]{\myCpp}{examples/typeid.cpp}
 
 \end{frame}
 
-\begin{frame}{Immortality}
+\begin{frame}{dynamic\_cast and type\_id examples}
+
+\inputminted{\myCpp}{examples/typeid2.cpp}
+
+\begin{block}{Output:}
+4Base
+0
+0x7ffe5133e4c8
+\end{block}
+
+\end{frame}
+
+\section*{Summary}
+
+\begin{frame}{Summary}
+
+\begin{itemizeSeq}
+\item Do think about objects and its type not memory,
+\item Don't do the type-punning in C++,
+\item Be careful when using objects outside of their lifetimes. 
+\end{itemizeSeq}
+
+\end{frame}
+
+\begin{frame}{Thank you!}
+
+I would like to say thank you to:
+
+\begin{itemize}
+\item All the people on CppLang [standardese] in helping me to understand standard wording,
+\item Richard Smith on making the implicit object creation proposal.
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}{Thank you!}
+
+\centerline{Questions?}
+
+\end{frame}
+
+\begin{frame}{Thank you!}
+
+\centerline{Thank you!}
 
 \end{frame}
 
