@@ -788,7 +788,7 @@ Implicit object creation in the C++20 will be extended for:
 
 \only{
 \begin{tikzpicture}[remember picture, overlay]
-\draw[color=magenta, thick, <-] (0.75,6.65) to[out=0, in=-135] (3,7.15) node[above]{vptr update};
+\draw[color=magenta, thick, <-] (1.5,7.65) to[out=0, in=135] (3,7.4) node[below]{vptr update};
 \end{tikzpicture}
 }<2>
 
@@ -802,11 +802,11 @@ Implicit object creation in the C++20 will be extended for:
 
 \only{
 \begin{tikzpicture}[remember picture, overlay]
-\draw[color=magenta, thick, <-] (2.6,5.3) to[out=0, in=160] node[above]{vptr write} (5.5,5);
-\draw[color=blue, thick, <-] (4.6,6.3) to[out=0, in=70] node[right]{vptr read}(5.5,5);
-\draw[color=violet, thick, <-] (5.5,5) to[out=-110, in=-180] (5.5, 4) node[right]{data race};
+\only{\draw[color=magenta, thick, <-] (2.6,5.3) to[out=0, in=160] node[above]{vptr write} (5.5,5);}<4->
+\only{\draw[color=blue, thick, <-] (4.6,6.3) to[out=0, in=70] node[right]{vptr read}(5.5,5);}<5->
+\only{\draw[color=violet, thick, <-] (5.5,5) to[out=-110, in=-180] (5.5, 4) node[right]{data race};}<6->
 \end{tikzpicture}
-}<4>
+}<4->
 
 \end{frame}
 
