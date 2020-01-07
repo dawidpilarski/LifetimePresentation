@@ -1,9 +1,9 @@
 struct S{
-    int a;
+  int a;
 };
 
 struct T {
-    int a;
+  int a;
 };
 
 int test(S& val1, T& val2){

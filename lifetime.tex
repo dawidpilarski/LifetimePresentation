@@ -338,19 +338,25 @@ Neither \texttt{X} nor \texttt{z} are variables.\\
 
 \begin{frame}{Examples of invalid C++ - union type punning}
 
-\inputminted{\myCpp}{examples/invalid_union_use.cpp}
+\only{\inputminted[highlightlines={1-6}]{\myCpp}{examples/invalid_union_use.cpp}}<1>
+\only{\inputminted[highlightlines={8-11}]{\myCpp}{examples/invalid_union_use.cpp}}<2>
+\only{\inputminted[highlightlines={13-14}]{\myCpp}{examples/invalid_union_use.cpp}}<3>
 
 \end{frame}
 
 \begin{frame}{Examples of invalid C++ - reinterpret\_cast}
 
-\inputminted{\myCpp}{examples/invalid-reinterpret-cast.cpp}
+\only{\inputminted[highlightlines={1-3}]{\myCpp}{examples/invalid-reinterpret-cast.cpp}}<1>
+\only{\inputminted[highlightlines={5,11}]{\myCpp}{examples/invalid-reinterpret-cast.cpp}}<2>
+\only{\inputminted[highlightlines={6}]{\myCpp}{examples/invalid-reinterpret-cast.cpp}}<3>
+\only{\inputminted[highlightlines={7}]{\myCpp}{examples/invalid-reinterpret-cast.cpp}}<4>
+\only{\inputminted[highlightlines={9,10}]{\myCpp}{examples/invalid-reinterpret-cast.cpp}}<5>
 
 \end{frame}
 
 \begin{frame}{reinterpret\_cast attempt 2}
 
-\inputminted{\myCpp}{examples/invalid_reinterpret_cast-2.cpp}
+\only{\inputminted[highlightlines={9}]{\myCpp}{examples/invalid_reinterpret_cast-2.cpp}}<1>
 
 \end{frame}
 
@@ -366,22 +372,24 @@ Neither \texttt{X} nor \texttt{z} are variables.\\
 
 \end{frame}
 
-\begin{frame}{Test - int + float}
+\begin{frame}{Test with two different class types}
 
-\inputminted{\myCpp}{examples/TBAA-simple-example.cpp}
+\only{\inputminted[highlightlines={1-3,5-7}]{\myCpp}{examples/TBAA-simple-example.cpp}}<1>
+\only{\inputminted[highlightlines={9,14}]{\myCpp}{examples/TBAA-simple-example.cpp}}<2>
+\only{\inputminted[highlightlines={10,11,13}]{\myCpp}{examples/TBAA-simple-example.cpp}}<3->
 
 \vfill
-\pause
-\centerline{Q: \alert{What is the return value?}}
+\only{\centerline{Q: \alert{What is the return value?}}}<4>
 
 \end{frame}
 
-\begin{frame}{Test - int + int}
+\begin{frame}{Test with two same structures}
 
-\inputminted{\myCpp}{examples/Non-TBAA-simple-example.cpp}
+\only{\inputminted[highlightlines={1-3}]{\myCpp}{examples/Non-TBAA-simple-example.cpp}}<1>
+\only{\inputminted[highlightlines={5}]{\myCpp}{examples/Non-TBAA-simple-example.cpp}}<2>
+\only{\inputminted[highlightlines={6,7,9}]{\myCpp}{examples/Non-TBAA-simple-example.cpp}}<3->
 \vfill
-\pause
-\centerline{Q: \alert{What is the return value?}}
+\only{\centerline{Q: \alert{What is the return value now?}}}<4>
 
 \end{frame}
 
@@ -396,7 +404,7 @@ Neither \texttt{X} nor \texttt{z} are variables.\\
 
 \vfill
 
-\inputminted[firstline=9]{\myCpp}{examples/TBAA-simple-example.cpp}
+\inputminted[firstline=9, highlightlines={9}]{\myCpp}{examples/TBAA-simple-example.cpp}
 
 \end{column}
 
@@ -407,7 +415,7 @@ Neither \texttt{X} nor \texttt{z} are variables.\\
 
 \vfill
 
-\centering\inputminted{gas}{examples/TBAA-simple-example.asm}
+\centering\inputminted[highlightlines={6}]{gas}{examples/TBAA-simple-example.asm}
 
 \end{column}
 
@@ -426,7 +434,7 @@ Neither \texttt{X} nor \texttt{z} are variables.\\
 
 \vfill
 
-\inputminted[firstline=5]{\myCpp}{examples/Non-TBAA-simple-example.cpp}
+\inputminted[firstline=5, highlightlines=5]{\myCpp}{examples/Non-TBAA-simple-example.cpp}
 
 \end{column}
 
@@ -437,7 +445,7 @@ Neither \texttt{X} nor \texttt{z} are variables.\\
 
 \vfill
 
-\centering\inputminted{gas}{examples/Non-TBAA-simple-asembly.asm}
+\centering\inputminted[highlightlines={6,7}]{gas}{examples/Non-TBAA-simple-asembly.asm}
 
 \end{column}
 
@@ -461,7 +469,7 @@ We cannot allow 2 different objects (not subobjects) live:
 \begin{columns}
 
 \begin{column}{0.48\linewidth}
-\inputminted{\myCpp}{examples/invalid_union_use.cpp}
+\inputminted[highlightlines={14}]{\myCpp}{examples/invalid_union_use.cpp}
 \end{column}
 \begin{column}{0.48\linewidth}
 
@@ -481,11 +489,9 @@ We cannot allow 2 different objects (not subobjects) live:
 
 \begin{frame}{How to do it right?}
 
-\inputminted{\myCpp}{examples/invalid_union_use_right.cpp}
-
-\pause
-
-Additional benefit: \alert{No endianess issue here!}
+\only{\inputminted[highlightlines={2-4}]{\myCpp}{examples/invalid_union_use_right.cpp}}<1>
+\only{\inputminted[highlightlines={6,10}]{\myCpp}{examples/invalid_union_use_right.cpp}}<2>
+\only{\inputminted[highlightlines={7-9}]{\myCpp}{examples/invalid_union_use_right.cpp}}<3->
 
 \end{frame}
 
@@ -511,12 +517,17 @@ Additional benefit: \alert{No endianess issue here!}
 
 \begin{frame}{How to do it right?}
 
-\inputminted{\myCpp}{examples/invalid-reinterpret-cast-right.cpp}
+\only{\inputminted[highlightlines={1-3}]{\myCpp}{examples/invalid-reinterpret-cast-right.cpp}}<1>
+\only{\inputminted[highlightlines={9,10}]{\myCpp}{examples/invalid-reinterpret-cast-right.cpp}}<2>
+
+\begin{tikzpicture}[remember picture, overlay]
+\draw[color=magenta, thick, ->] (2,6.25) to[out=0, in=180] (4,5.25) node[right](){trivially copyable};
+\end{tikzpicture}
 
 \end{frame}
 
 \begin{frame}{Or with C++20}
-\inputminted{\myCpp}{examples/invalid-reinterpret-cast-right-modern.cpp}
+\inputminted[highlightlines={9}]{\myCpp}{examples/invalid-reinterpret-cast-right-modern.cpp}
 \end{frame}
 
 \begin{frame}{Explanations: reading from a stream - placement new}
@@ -525,7 +536,7 @@ Additional benefit: \alert{No endianess issue here!}
 
 \begin{column}{0.48\linewidth}
 
-\inputminted{\myCpp}{examples/invalid_reinterpret_cast-2.cpp}
+\inputminted{\myCpp}{examples/invalid-reinterpret-cast-2-short.cpp}
 \end{column}
 
 \begin{column}{0.48\linewidth}
@@ -536,7 +547,6 @@ Additional benefit: \alert{No endianess issue here!}
 \item T is created uninitialized
 \item reading T is reading indeterminate value, which is UB
 \end{itemizeSeq}
-
 \end{column}
 \end{columns}
 \end{frame}
@@ -585,23 +595,42 @@ constexpr T* launder(T* p) noexcept;
 
 \begin{frame}{Usage of std::launder}
 
-\inputminted{\myCpp}{examples/placement-new-launder.cpp}
+\only{\inputminted[highlightlines={5-6}]{\myCpp}{examples/placement-new-launder.cpp}}<1>
+\only{\inputminted[highlightlines={7}]{\myCpp}{examples/placement-new-launder.cpp}}<2>
+\only{\inputminted[highlightlines={8}]{\myCpp}{examples/placement-new-launder.cpp}}<3->
+
+\only{
+\begin{tikzpicture}[remember picture, overlay]
+\draw[color=magenta, thick, <-] (1,0.7) to[out=-90, in=-180] node[xshift=1.1cm, yshift=-0.1cm]{valid} (2,0);
+\end{tikzpicture}	
+}<4>
 
 \end{frame}
 
 \begin{frame}{Other use-cases of the std::launder}
 
-\inputminted{\myCpp}{examples/non-assignable-launder.cpp}
+\only{\inputminted[highlightlines={1-3}]{\myCpp}{examples/non-assignable-launder.cpp}}<1>
+\only{\inputminted[highlightlines={5,6}]{\myCpp}{examples/non-assignable-launder.cpp}}<2>
+\only{\inputminted[highlightlines={8,9}]{\myCpp}{examples/non-assignable-launder.cpp}}<3>
+\only{\inputminted[highlightlines={11,12}]{\myCpp}{examples/non-assignable-launder.cpp}}<4>
 
-Is this code valid? (drawings)
+\begin{tikzpicture}[remember picture, overlay]
+\draw[color=magenta, thick, <-] (2,6.25) to[out=0, in=180] node[xshift=1.75cm, yshift=-0.4cm]{not assignable} (3,5.5);
+
+\only{
+\draw[color=violet, thick, <-] (2.1,0.9) to[out=0, in=180] (3.1,1.15);
+\draw[color=violet, thick, <-] (2.1,1.4) to[out=0, in=180] node[xshift=2cm, yshift=-0.1cm]{Are those correct?} (3.1,1.15);	
+}<4>
+
+\end{tikzpicture}
 
 \end{frame}
 
 \begin{frame}{Rules for placement new for such cases}
 
-\centerline{\alert{You can do placement new on old object.}}
+\centerline{You can do placement new on old object with same type and keep using old object.}
 \pause
-\centerline{\alert{Not always we can use original object (until C++20). For example:}}
+\centerline{With some exceptions (until C++20). For example:}
 
 \begin{itemizeSeq}
 \item We cannot use original object when it has:
@@ -615,13 +644,17 @@ Is this code valid? (drawings)
 
 \begin{frame}{Example: const member or reference}
 
-\inputminted{\myCpp}{examples/non-assignable-launder-bad.cpp}
+\only{\inputminted[highlightlines={1-4}]{\myCpp}{examples/non-assignable-launder-bad.cpp}}<1>
+\only{\inputminted[highlightlines={11}]{\myCpp}{examples/non-assignable-launder-bad.cpp}}<2>
+\only{\inputminted[highlightlines={12}]{\myCpp}{examples/non-assignable-launder-bad.cpp}}<3>
+\only{\inputminted[highlightlines={13}]{\myCpp}{examples/non-assignable-launder-bad.cpp}}<4>
 
 \end{frame}
 
 \begin{frame}{Example: standard layout types}
 
-\inputminted{\myCpp}{examples/non-assignable-launder-good.cpp}
+\only{\inputminted[highlightlines={1-4}]{\myCpp}{examples/non-assignable-launder-good.cpp}}<1>
+\only{\inputminted[highlightlines={11-13}]{\myCpp}{examples/non-assignable-launder-good.cpp}}<2>
 
 \end{frame}
 
@@ -642,13 +675,23 @@ What does that mean?
 
 \begin{frame}{Implicit object creation for unions}
 
-\inputminted{\myCpp}{examples/implicit-obj-creation-unions.cpp}
+\only{\inputminted[highlightlines={1-4}]{\myCpp}{examples/implicit-obj-creation-unions.cpp}}<1>
+\only{\inputminted[highlightlines={6-9}]{\myCpp}{examples/implicit-obj-creation-unions.cpp}}<2>
+\only{\inputminted[highlightlines={11-13}]{\myCpp}{examples/implicit-obj-creation-unions.cpp}}<3>
 
+
+\only{
+\begin{tikzpicture}[remember picture, overlay]
+\draw[color=magenta, thick, <-] (3.2,2)   to[out=0, in=180] (4.5,1.4);
+\draw[color=magenta, thick, <-] (3.2,1.4) to[out=0, in=180] (4.5,1.4);
+\draw[color=magenta, thick, <-] (3.2,0.8) to[out=0, in=180] node[xshift=1.25cm, yshift=0.3cm]{correct} (4.5,1.4);
+\end{tikzpicture}
+}<3>
 \end{frame}
 
 \begin{frame}{Implicit object creation for unions}
 
-\inputminted{\myCpp}{examples/implicit-obj-creation-unions-nondefault.cpp}
+\inputminted[highlightlines={4,13}]{\myCpp}{examples/implicit-obj-creation-unions-nondefault.cpp}
 
 \end{frame}
 
@@ -727,19 +770,43 @@ Implicit object creation in the C++20 will be extended for:
 
 \begin{frame}{Concurrent access and vptr}
 
-\inputminted{\myCpp}{examples/vptr-vcall.cpp}
+\only{\inputminted[highlightlines={1-4}]{\myCpp}{examples/vptr-vcall.cpp}}<1>
+\only{\inputminted[highlightlines={5-7}]{\myCpp}{examples/vptr-vcall.cpp}}<2>
+\only{\inputminted[highlightlines={10-14}]{\myCpp}{examples/vptr-vcall.cpp}}<3>
+\only{\inputminted[highlightlines={16}]{\myCpp}{examples/vptr-vcall.cpp}}<4->
 
+\only{
+\begin{tikzpicture}[remember picture, overlay]
+\draw[color=magenta, thick, <-] (0.75,6.65) to[out=0, in=-135] (3,7.15) node[above]{vptr update};
+\end{tikzpicture}
+}<5>
 \end{frame}
 
 \begin{frame}{Concurrent access and vptr}
 
-\inputminted{\myCpp}{examples/vptr-vcall-dtor.cpp}
+\inputminted[highlightlines={1-4}]{\myCpp}{examples/vptr-vcall-dtor.cpp}
+
+\only{
+\begin{tikzpicture}[remember picture, overlay]
+\draw[color=magenta, thick, <-] (0.75,6.65) to[out=0, in=-135] (3,7.15) node[above]{vptr update};
+\end{tikzpicture}
+}<2>
 
 \end{frame}
 
 \begin{frame}{Avoid synchronisation in dtors}
 
-\inputminted{\myCpp}{examples/dtors-sync.cpp}
+\only{\inputminted[highlightlines={1,2,13}]{\myCpp}{examples/dtors-sync.cpp}}<1>
+\only{\inputminted[highlightlines={4-8}]{\myCpp}{examples/dtors-sync.cpp}}<2>
+\only{\inputminted[highlightlines={5,7}]{\myCpp}{examples/dtors-sync.cpp}}<3->
+
+\only{
+\begin{tikzpicture}[remember picture, overlay]
+\draw[color=magenta, thick, <-] (2.6,5.3) to[out=0, in=160] node[above]{vptr write} (5.5,5);
+\draw[color=blue, thick, <-] (4.6,6.3) to[out=0, in=70] node[right]{vptr read}(5.5,5);
+\draw[color=violet, thick, <-] (5.5,5) to[out=-110, in=-180] (5.5, 4) node[right]{data race};
+\end{tikzpicture}
+}<4>
 
 \end{frame}
 
@@ -751,25 +818,38 @@ Implicit object creation in the C++20 will be extended for:
 
 \begin{frame}{dynamic\_cast and type\_id}
 
-\texttt{\alert{Dynamic cast}} and \texttt{\alert{typeid}} cannot be used during construction or destruction if they don't refer to the base or current objects. 
+\texttt{\alert{Dynamic\_cast}} and \texttt{\alert{typeid}} cannot be used during construction or destruction if it's operand doesn't refer to the base or current object. 
 
 \end{frame}
 
 \begin{frame}{dynamic\_cast and type\_id examples}
 
-\inputminted[fontsize=\footnotesize]{\myCpp}{examples/typeid.cpp}
-
+\only{\inputminted[fontsize=\footnotesize, highlightlines={1-3}]{\myCpp}{examples/typeid.cpp}}<1>
+\only{\inputminted[fontsize=\footnotesize, highlightlines={5-7}]{\myCpp}{examples/typeid.cpp}}<2>
+\only{\inputminted[fontsize=\footnotesize, highlightlines={9-16}]{\myCpp}{examples/typeid.cpp}}<3>
+\only{\inputminted[fontsize=\footnotesize, highlightlines={11}]{\myCpp}{examples/typeid.cpp}}<4>
+\only{\inputminted[fontsize=\footnotesize, highlightlines={12}]{\myCpp}{examples/typeid.cpp}}<5>
+\only{\inputminted[fontsize=\footnotesize, highlightlines={13}]{\myCpp}{examples/typeid.cpp}}<6>
+\only{\inputminted[fontsize=\footnotesize, highlightlines={14}]{\myCpp}{examples/typeid.cpp}}<7>
+\only{\inputminted[fontsize=\footnotesize, highlightlines={15}]{\myCpp}{examples/typeid.cpp}}<8>
 \end{frame}
 
 \begin{frame}{dynamic\_cast and type\_id examples}
 
-\inputminted{\myCpp}{examples/typeid2.cpp}
+\only{\inputminted[highlightlines={1-4}]{\myCpp}{examples/typeid2.cpp}}<1>
+\only{\inputminted[highlightlines={5}]{\myCpp}{examples/typeid2.cpp}}<2>
+\only{\inputminted[highlightlines={7-11}]{\myCpp}{examples/typeid2.cpp}}<3>
+\only{\inputminted[highlightlines={8}]{\myCpp}{examples/typeid2.cpp}}<4>
+\only{\inputminted[highlightlines={9}]{\myCpp}{examples/typeid2.cpp}}<5>
+\only{\inputminted[highlightlines={10}]{\myCpp}{examples/typeid2.cpp}}<6>
 
+\only{
 \begin{block}{Output:}
-4Base
-0
-0x7ffe5133e4c8
+\only{\alert{4Base}}<4>
+\only{\alert{0}}<5>
+\only{\alert{0x7ffe5133e4c8}}<6>
 \end{block}
+}<4-6>
 
 \end{frame}
 
@@ -796,17 +876,24 @@ I would like to say thank you to:
 
 \end{frame}
 
+
+\begin{frame}{Further readings}
+
+\vfill
+
+\centerline{\alert{\href{http://blog.panicsoftware.com}{blog.panicsoftware.com}}}
+
+\vfill
+
+\centerline{\alert{\href{https://github.com/dawidpilarski/LifetimePresentation}{github.com/dawidpilarski/LifetimePresentation}}}
+
+\vfill
+\end{frame}
+
 \begin{frame}{Thank you!}
 
 \centerline{Questions?}
 
 \end{frame}
-
-\begin{frame}{Thank you!}
-
-\centerline{Thank you!}
-
-\end{frame}
-
 
 \end{document}
