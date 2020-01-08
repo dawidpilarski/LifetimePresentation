@@ -455,7 +455,7 @@ Neither \texttt{X} nor \texttt{z} are variables.\\
 
 \begin{frame}{Conclusion}
 
-We cannot allow 2 different objects (not subobjects) live:
+We cannot allow 2 objects of different types (not subobjects) live:
 
 \begin{itemize}
 	\item in the same space.
@@ -599,11 +599,11 @@ constexpr T* launder(T* p) noexcept;
 \only{\inputminted[highlightlines={7}]{\myCpp}{examples/placement-new-launder.cpp}}<2>
 \only{\inputminted[highlightlines={8}]{\myCpp}{examples/placement-new-launder.cpp}}<3->
 
-\only{
+\uncover<4>{
 \begin{tikzpicture}[remember picture, overlay]
 \draw[color=magenta, thick, <-] (1,0.7) to[out=-90, in=-180] node[xshift=1.1cm, yshift=-0.1cm]{valid} (2,0);
 \end{tikzpicture}	
-}<4>
+}
 
 \end{frame}
 
@@ -843,13 +843,13 @@ Implicit object creation in the C++20 will be extended for:
 \only{\inputminted[highlightlines={9}]{\myCpp}{examples/typeid2.cpp}}<5>
 \only{\inputminted[highlightlines={10}]{\myCpp}{examples/typeid2.cpp}}<6>
 
-\only{
+\uncover<4-6>{
 \begin{block}{Output:}
 \only{\alert{4Base}}<4>
 \only{\alert{0}}<5>
 \only{\alert{0x7ffe5133e4c8}}<6>
 \end{block}
-}<4-6>
+}
 
 \end{frame}
 
@@ -883,17 +883,30 @@ I would like to say thank you to:
 
 \centerline{\alert{\href{http://blog.panicsoftware.com}{blog.panicsoftware.com}}}
 
+\pause
 \vfill
 
 \centerline{\alert{\href{https://github.com/dawidpilarski/LifetimePresentation}{github.com/dawidpilarski/LifetimePresentation}}}
 
+\pause
 \vfill
+
+
+\centerline{\alert{Slack: nav-cpp-cop}}
+
+\vfill
+
 \end{frame}
 
 \begin{frame}{Thank you!}
 
 \centerline{Questions?}
 
+\vfill
+
+\centerline{\alert{\href{http://blog.panicsoftware.com}{blog.panicsoftware.com}}}
+\centerline{\alert{\href{https://github.com/dawidpilarski/LifetimePresentation}{github.com/dawidpilarski/LifetimePresentation}}}
+\centerline{\alert{Slack: nav-cpp-cop}}
 \end{frame}
 
 \end{document}

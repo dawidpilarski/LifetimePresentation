@@ -1,5 +1,5 @@
 struct S{
-    int a;
+  int a;
 };
 
 int test(S& val1, S& val2){
