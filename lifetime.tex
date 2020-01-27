@@ -2,7 +2,7 @@
 \documentclass{panicsoftware-presentation}
 
 \usepackage{tikz}
-\usetikzlibrary{decorations.pathreplacing}
+\usetikzlibrary{decorations.pathreplacing,patterns}
 
 \title{Lifetime of the C++ object}
 \author{Dawid Pilarski}
@@ -189,11 +189,11 @@ Is variable.
 
 \begin{column}{0.3\linewidth}
 \begin{minted}{\myCpp}
-struct X{int z;}x;
+struct X{int y;}z;
 \end{minted}
 \vskip 1cm
-Neither \texttt{X} nor \texttt{z} are variables.\\
-\texttt{x} is a variable.
+Neither \texttt{X} nor \texttt{y} are variables.\\
+\texttt{z} is a variable.
 \end{column}
 
 \end{columns}
@@ -233,6 +233,7 @@ Neither \texttt{X} nor \texttt{z} are variables.\\
 		\item The object has been recently updated.
 		\item The variable definition is unmaintained and unsupported.
 		\item Same about references...
+		\item Wikipedia is wrong regarding C++ language.
 	\end{itemizeSeq}
 \end{frame}
 
@@ -248,13 +249,17 @@ Neither \texttt{X} nor \texttt{z} are variables.\\
 \begin{tikzpicture}
 
 \draw[fill=blue!30!white] (-.75, -2) rectangle (-0.1, 2);
+\draw[pattern=north east lines] (-.75, 2) rectangle (-0.1, 2.1);
+\draw[pattern=north east lines] (-.75, -2) rectangle (-0.1, -2.1);
 
-\draw[dashed] (-1, 1) -- (2.5, 1);
-\draw[dashed] (-1, -1) -- (2.5, -1);
-
+\draw[<-] (-0.75, 2.1) to[out=-180, in=0] (-2.1, 1.5) node[left]{\footnotesize storage allocation}; \pause
 \draw [decorate, decoration={brace, amplitude=5pt}] (0, 2) -- (0, 1) node[xshift=1.35cm ,midway, text width=2cm]{\footnotesize object under construction};
+\draw[dashed] (-1, 1) -- (2.5, 1); \pause
 \draw [decorate, decoration={brace, amplitude=5pt}] (0, 1) -- (0,-1) node[xshift=1.35cm ,midway, text width=2cm]{\footnotesize lifetime};
+\draw[dashed] (-1, -1) -- (2.5, -1);\pause
 \draw [decorate, decoration={brace, amplitude=5pt}] (0, -1) -- (0, -2) node[xshift=1.35cm ,midway, text width=2cm]{\footnotesize object under destruction};
+\pause
+\draw[<-] (-0.75, -2.1) to[out=-180, in=0] (-2.1, -1.5) node[left]{\footnotesize storage deallocation};
 
 \end{tikzpicture}
 \vfill
@@ -293,6 +298,73 @@ Neither \texttt{X} nor \texttt{z} are variables.\\
 \end{itemize}
 \item[any type] when storage occupied by an object is reused or released.
 \end{description}
+
+\end{frame}
+
+\begin{frame}{Limitations on objects - Storage allocated cdtor not yet called}
+
+During this phase you must treat every pointer/reference to such object as if it was raw storage.
+
+During construction you cannot:
+\begin{itemizeSeq}
+	\item pass pointer as \texttt{delete} argument,
+	\item access any non-static members (unless type has trivial ctor),
+	\item \texttt{static\_cast} to types other than:
+	\begin{itemize}
+		\item \texttt{void*}
+		\item \texttt{char*}
+		\item \texttt{unsigned char*}
+		\item \texttt{std::byte*}
+	\end{itemize} 
+	\item \texttt{dynamic\_cast} it.
+\end{itemizeSeq}
+
+\end{frame}
+
+\begin{frame}{Limitations on objects - object under (con|de)struction}
+You \alert{can access non-static members of a class}, but only via \alert{this} pointer.
+
+Example from C++ standard draft:
+
+\only{\inputminted[highlightlines={1-4}]{\myCpp}{examples/access-via-this-under-construction.cpp}}<2>
+\only{\inputminted[highlightlines={3}]{\myCpp}{examples/access-via-this-under-construction.cpp}}<3>
+\only{\inputminted[highlightlines={7-10}]{\myCpp}{examples/access-via-this-under-construction.cpp}}<4>
+\only{\inputminted[highlightlines={6}]{\myCpp}{examples/access-via-this-under-construction.cpp}}<5>
+\only{\inputminted[highlightlines={8,9}]{\myCpp}{examples/access-via-this-under-construction.cpp}}<6>
+
+\end{frame}
+
+\begin{frame}{Limitations on objects - object under (con|de)struction}
+\only{\inputminted[highlightlines={1-4}]{\myCpp}{examples/typeid2.cpp}}<1>
+\only{\inputminted[highlightlines={5}]{\myCpp}{examples/typeid2.cpp}}<2>
+\only{\inputminted[highlightlines={7-11}]{\myCpp}{examples/typeid2.cpp}}<3>
+\only{\inputminted[highlightlines={8}]{\myCpp}{examples/typeid2.cpp}}<4>
+\only{\inputminted[highlightlines={9}]{\myCpp}{examples/typeid2.cpp}}<5>
+
+\uncover<4-5>{
+\begin{block}{Output:}
+\only{\alert{4Base}}<4>
+\only{\alert{0}}<5>
+\end{block}
+}
+\end{frame}
+
+\begin{frame}[fragile]{Limitations on objects - object under (con|de)struction}
+
+\begin{columns}[t]
+\begin{column}{0.48\linewidth}
+\inputminted[fontsize=\small]{\myCpp}{examples/runnable.cpp}
+\vfill
+\end{column}
+\begin{column}{0.48\linewidth}
+\begin{minted}[fontsize=\small]{\myCpp}
+runnable* d = new Derived;
+thread th1([d]{d->execute()});
+thread th2([d]{delete d;});
+\end{minted}
+\end{column}
+
+\end{columns}
 
 \end{frame}
 
