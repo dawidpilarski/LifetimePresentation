@@ -182,7 +182,7 @@ Is a variable.
 int& x = ...
 \end{minted}
 \vskip 1cm
-Is variable.
+Is a variable.
 
 \end{column}
 \pause
@@ -225,32 +225,23 @@ Neither \texttt{X} nor \texttt{y} are variables.\\
 
 \end{frame}
 
-
-\begin{frame}{Definitions}
-	If you want to get precise definitions, you need to look at standard draft. In case of \href{http://cppreference.com}{\alert{cppreference}}:
-
-	\begin{itemizeSeq}
-		\item The object has been recently updated.
-		\item The variable definition is unmaintained and unsupported.
-		\item Same about references...
-		\item Wikipedia is wrong regarding C++ language.
-	\end{itemizeSeq}
-\end{frame}
-
 \section*{Lifetime}
 
 \begin{frame}{What is a lifetime?}
 
-\centerline{Lifetime is a \alert{runtime} property of an object.}
-
+\centerline{Lifetime is a property of an object.}
+\centerline{During the lifetime of an object you can use it without additional restrictions.}
 \vfill
 \centering
+
+\pause
 
 \begin{tikzpicture}
 
 \draw[fill=blue!30!white] (-.75, -2) rectangle (-0.1, 2);
 \draw[pattern=north east lines] (-.75, 2) rectangle (-0.1, 2.1);
 \draw[pattern=north east lines] (-.75, -2) rectangle (-0.1, -2.1);
+\draw[->] (3.5, 2.2) -- (3.5, -2.2) node[right]{time};
 
 \draw[<-] (-0.75, 2.1) to[out=-180, in=0] (-2.1, 1.5) node[left]{\footnotesize storage allocation}; \pause
 \draw [decorate, decoration={brace, amplitude=5pt}] (0, 2) -- (0, 1) node[xshift=1.35cm ,midway, text width=2cm]{\footnotesize object under construction};
@@ -262,8 +253,6 @@ Neither \texttt{X} nor \texttt{y} are variables.\\
 \draw[<-] (-0.75, -2.1) to[out=-180, in=0] (-2.1, -1.5) node[left]{\footnotesize storage deallocation};
 
 \end{tikzpicture}
-\vfill
-\centerline{During the lifetime of an object you can use it without additional restrictions.}
 
 \end{frame}
 
@@ -323,21 +312,32 @@ During construction you cannot:
 
 \begin{frame}{Limitations on objects - object under (con|de)struction}
 You \alert{can access non-static members of a class}, but only via \alert{this} pointer.
+\vfill
+Example...
+\end{frame}
 
-Example from C++ standard draft:
+\begin{frame}{Limitations on objects - object under (con|de)struction}
 
-\only{\inputminted[highlightlines={1-4}]{\myCpp}{examples/access-via-this-under-construction.cpp}}<2>
-\only{\inputminted[highlightlines={3}]{\myCpp}{examples/access-via-this-under-construction.cpp}}<3>
-\only{\inputminted[highlightlines={7-10}]{\myCpp}{examples/access-via-this-under-construction.cpp}}<4>
-\only{\inputminted[highlightlines={6}]{\myCpp}{examples/access-via-this-under-construction.cpp}}<5>
-\only{\inputminted[highlightlines={8,9}]{\myCpp}{examples/access-via-this-under-construction.cpp}}<6>
+\only{\inputminted[highlightlines={1-4}]{\myCpp}{examples/access-via-this-under-construction.cpp}}<1>
+\only{\inputminted[highlightlines={3}]{\myCpp}{examples/access-via-this-under-construction.cpp}}<2>
+\only{\inputminted[highlightlines={7-10}]{\myCpp}{examples/access-via-this-under-construction.cpp}}<3>
+\only{\inputminted[highlightlines={6}]{\myCpp}{examples/access-via-this-under-construction.cpp}}<4>
+\only{\inputminted[highlightlines={8,9}]{\myCpp}{examples/access-via-this-under-construction.cpp}}<5>
 
+\end{frame}
+
+\begin{frame}{Limitations on objects - object under (con|de)struction}
+\begin{center}
+During object creation and destruction, \alert{base object, whose constructor is running is considered most derived object}.
+\end{center}
+\vfill
+Example...
 \end{frame}
 
 \begin{frame}{Limitations on objects - object under (con|de)struction}
 \only{\inputminted[highlightlines={1-4}]{\myCpp}{examples/typeid2.cpp}}<1>
 \only{\inputminted[highlightlines={5}]{\myCpp}{examples/typeid2.cpp}}<2>
-\only{\inputminted[highlightlines={7-11}]{\myCpp}{examples/typeid2.cpp}}<3>
+\only{\inputminted[highlightlines={7-10}]{\myCpp}{examples/typeid2.cpp}}<3>
 \only{\inputminted[highlightlines={8}]{\myCpp}{examples/typeid2.cpp}}<4>
 \only{\inputminted[highlightlines={9}]{\myCpp}{examples/typeid2.cpp}}<5>
 
@@ -349,22 +349,82 @@ Example from C++ standard draft:
 }
 \end{frame}
 
-\begin{frame}[fragile]{Limitations on objects - object under (con|de)struction}
+\begin{frame}{Limitations on objects - object under (con|de)struction}
+
+\centerline{Watch out for \alert{vptr - its not thread safe}.}
+\vfill
+Example...
+
+\end{frame}
+
+\begin{frame}{Limitations on objects - object under (con|de)struction}
 
 \begin{columns}[t]
 \begin{column}{0.48\linewidth}
-\inputminted[fontsize=\small]{\myCpp}{examples/runnable.cpp}
+\only{\inputminted[fontsize=\small, highlightlines={1, 16}]{\myCpp}{examples/runnable.cpp}}<1>
+\only{\inputminted[fontsize=\small, highlightlines={14}]{\myCpp}{examples/runnable.cpp}}<2>
+\only{\inputminted[fontsize=\small, highlightlines={2-7}]{\myCpp}{examples/runnable.cpp}}<3>
+\only{\inputminted[fontsize=\small, highlightlines={8-12}]{\myCpp}{examples/runnable.cpp}}<4>
+\only{\inputminted[fontsize=\small]{\myCpp}{examples/runnable.cpp}}<5->
 \vfill
 \end{column}
 \begin{column}{0.48\linewidth}
-\begin{minted}[fontsize=\small]{\myCpp}
-runnable* d = new Derived;
-thread th1([d]{d->execute()});
-thread th2([d]{delete d;});
-\end{minted}
+\vskip 2em
+\only{\inputminted[highlightlines={1}, fontsize=\small]{\myCpp}{examples/runnable_example.cpp}}<5>
+\only{\inputminted[highlightlines={2}, fontsize=\small]{\myCpp}{examples/runnable_example.cpp}}<6>
+\only{\inputminted[highlightlines={3}, fontsize=\small]{\myCpp}{examples/runnable_example.cpp}}<7>
+\only{\inputminted[fontsize=\small]{\myCpp}{examples/runnable_example.cpp}}<8->
 \end{column}
 
 \end{columns}
+
+\begin{tikzpicture}[remember picture, overlay]
+
+\only{\draw[thick, color=magenta, ->] (5.5, 6.05) to[out=180, in=0] node[above]{vptr read} (2.75, 6.25);}<6->
+\only{\draw[thick, color=blue, <-] (2.75, 4) to[out=0, in=-90]node[above]{vptr write} (9, 5.5);}<7->
+
+\only{\node[color=red] at (8, 2) {data race!};}<8>
+
+
+\end{tikzpicture}
+
+\end{frame}
+
+\begin{frame}{Limitations on objects - object under (con|de)struction}
+\begin{center}
+When casting \alert{this} pointer to a base subobject,
+if any of the subobjects involved in the casting path didn't have their constructor started, the behavior is undefined.
+\end{center}
+\vfill
+
+Example...
+
+\end{frame}
+
+\begin{frame}{Limitations on objects - object under (con|de)struction}
+\inputminted{\myCpp}{examples/pointer-to-base-object-ub.cpp}
+
+\begin{tikzpicture}[remember picture, overlay]
+
+\draw[thick, color=magenta, ->] (2.25,1.25) to[out=-90, in=180] (3.5,0.5) node[right]{pointer to object, which ctor didn't start};
+
+\end{tikzpicture}
+\end{frame}
+
+\begin{frame}{Limitations on objects - object under (con|de)struction}
+
+\only{\inputminted[highlightlines={1, 5-7}]{\myCpp}{examples/pointer-to-non-created-member.cpp}}<1>
+\only{\inputminted[highlightlines={2-4}]{\myCpp}{examples/pointer-to-non-created-member.cpp}}<2>
+\only{\inputminted[highlightlines={8,14}]{\myCpp}{examples/pointer-to-non-created-member.cpp}}<3>
+\only{\inputminted[highlightlines={12-13}]{\myCpp}{examples/pointer-to-non-created-member.cpp}}<4>
+\only{\inputminted[highlightlines={9-11}]{\myCpp}{examples/pointer-to-non-created-member.cpp}}<5>
+
+
+\end{frame}
+
+\begin{frame}{Lifetime of an object}
+
+No previously mentioned limitations exists when object is in its lifetime.
 
 \end{frame}
 
@@ -527,7 +587,7 @@ thread th2([d]{delete d;});
 
 \begin{frame}{Conclusion}
 
-We cannot allow 2 objects of different types (not subobjects) live:
+We cannot allow 2 complete objects of different types (not subobjects) live:
 
 \begin{itemize}
 	\item in the same space.
@@ -615,7 +675,7 @@ We cannot allow 2 objects of different types (not subobjects) live:
 
 \begin{itemizeSeq}
 \item placement new reuses the storage (ends lifetime of buff),
-\item value is a runtime property of an object (doesn't exist outside of it's lifetime)
+\item value is a property of an object (doesn't exist outside of it's lifetime)
 \item T is created uninitialized
 \item reading T is reading indeterminate value, which is UB
 \end{itemizeSeq}
@@ -623,7 +683,7 @@ We cannot allow 2 objects of different types (not subobjects) live:
 \end{columns}
 \end{frame}
 
-\section*{std::launder}
+\section{Pointers and std::launder}
 
 \begin{frame}{Tricky placement new}
 
@@ -805,123 +865,6 @@ Implicit object creation in the C++20 will be extended for:
 
 \end{columns}
 
-
-\end{frame}
-
-\section{Beyond the object lifetime.}
-
-\begin{frame}{Lifetime}
-
-\begin{columns}
-\begin{column}{0.58\linewidth}
-\begin{tikzpicture}
-
-\draw[fill=blue!30!white] (-.75, -2) rectangle (-0.1, 2);
-
-\draw[dashed] (-1, 1) -- (2.5, 1);
-\draw[dashed] (-1, -1) -- (2.5, -1);
-
-\only{\draw [decorate, decoration={brace, amplitude=5pt}] (0, 2) -- (0, 1) node[xshift=1.35cm ,midway, text width=2cm]{\footnotesize \alert{object under construction}}}<1>;
-\only{\draw [decorate, decoration={brace, amplitude=5pt}] (0, 2) -- (0, 1) node[xshift=1.35cm ,midway, text width=2cm]{\footnotesize object under construction}}<2->;
-
-\only{\draw [decorate, decoration={brace, amplitude=5pt}] (0, 1) -- (0,-1) node[xshift=1.35cm ,midway, text width=2cm]{\footnotesize \alert{lifetime}}}<2>;
-\only{\draw [decorate, decoration={brace, amplitude=5pt}] (0, 1) -- (0,-1) node[xshift=1.35cm ,midway, text width=2cm]{\footnotesize lifetime}}<3->;
-\only{\draw [decorate, decoration={brace, amplitude=5pt}] (0, -1) -- (0, -2) node[xshift=1.35cm ,midway, text width=2cm]{\footnotesize \alert{object under destruction}}}<3>;
-
-\end{tikzpicture}
-\end{column}
-\begin{column}{0.38\linewidth}
-
-\only{Not for \alert{\texttt{trivially\_constructible}} types}<1>
-\only{Not for \alert{\texttt{trivially\_destructible}} types. Optional for other types.}<3>
-
-\end{column}
-\end{columns}
-
-\end{frame}
-
-\begin{frame}{Concurrent access and vptr}
-
-\only{\inputminted[highlightlines={1-4}]{\myCpp}{examples/vptr-vcall.cpp}}<1>
-\only{\inputminted[highlightlines={5-7}]{\myCpp}{examples/vptr-vcall.cpp}}<2>
-\only{\inputminted[highlightlines={10-14}]{\myCpp}{examples/vptr-vcall.cpp}}<3>
-\only{\inputminted[highlightlines={16}]{\myCpp}{examples/vptr-vcall.cpp}}<4->
-
-\only{
-\begin{tikzpicture}[remember picture, overlay]
-\draw[color=magenta, thick, <-] (0.75,6.65) to[out=0, in=-135] (3,7.15) node[above]{vptr update};
-\end{tikzpicture}
-}<5>
-\end{frame}
-
-\begin{frame}{Concurrent access and vptr}
-
-\inputminted[highlightlines={1-4}]{\myCpp}{examples/vptr-vcall-dtor.cpp}
-
-\only{
-\begin{tikzpicture}[remember picture, overlay]
-\draw[color=magenta, thick, <-] (1.5,7.65) to[out=0, in=135] (3,7.4) node[below]{vptr update};
-\end{tikzpicture}
-}<2>
-
-\end{frame}
-
-\begin{frame}{Avoid synchronisation in dtors}
-
-\only{\inputminted[highlightlines={1,2,13}]{\myCpp}{examples/dtors-sync.cpp}}<1>
-\only{\inputminted[highlightlines={4-8}]{\myCpp}{examples/dtors-sync.cpp}}<2>
-\only{\inputminted[highlightlines={5,7}]{\myCpp}{examples/dtors-sync.cpp}}<3->
-
-\only{
-\begin{tikzpicture}[remember picture, overlay]
-\only{\draw[color=magenta, thick, <-] (2.6,5.3) to[out=0, in=160] node[above]{vptr write} (5.5,5);}<4->
-\only{\draw[color=blue, thick, <-] (4.6,6.3) to[out=0, in=70] node[right]{vptr read}(5.5,5);}<5->
-\only{\draw[color=violet, thick, <-] (5.5,5) to[out=-110, in=-180] (5.5, 4) node[right]{data race};}<6->
-\end{tikzpicture}
-}<4->
-
-\end{frame}
-
-\begin{frame}{Summary}
-
-\centerline{\alert{Do not call virtual functions beyond the lifetime of an object!}}
-
-\end{frame}
-
-\begin{frame}{dynamic\_cast and type\_id}
-
-\texttt{\alert{Dynamic\_cast}} and \texttt{\alert{typeid}} cannot be used during construction or destruction if it's operand doesn't refer to the base or current object. 
-
-\end{frame}
-
-\begin{frame}{dynamic\_cast and type\_id examples}
-
-\only{\inputminted[fontsize=\footnotesize, highlightlines={1-3}]{\myCpp}{examples/typeid.cpp}}<1>
-\only{\inputminted[fontsize=\footnotesize, highlightlines={5-7}]{\myCpp}{examples/typeid.cpp}}<2>
-\only{\inputminted[fontsize=\footnotesize, highlightlines={9-16}]{\myCpp}{examples/typeid.cpp}}<3>
-\only{\inputminted[fontsize=\footnotesize, highlightlines={11}]{\myCpp}{examples/typeid.cpp}}<4>
-\only{\inputminted[fontsize=\footnotesize, highlightlines={12}]{\myCpp}{examples/typeid.cpp}}<5>
-\only{\inputminted[fontsize=\footnotesize, highlightlines={13}]{\myCpp}{examples/typeid.cpp}}<6>
-\only{\inputminted[fontsize=\footnotesize, highlightlines={14}]{\myCpp}{examples/typeid.cpp}}<7>
-\only{\inputminted[fontsize=\footnotesize, highlightlines={15}]{\myCpp}{examples/typeid.cpp}}<8>
-\end{frame}
-
-\begin{frame}{dynamic\_cast and type\_id examples}
-
-\only{\inputminted[highlightlines={1-4}]{\myCpp}{examples/typeid2.cpp}}<1>
-\only{\inputminted[highlightlines={5}]{\myCpp}{examples/typeid2.cpp}}<2>
-\only{\inputminted[highlightlines={7-11}]{\myCpp}{examples/typeid2.cpp}}<3>
-\only{\inputminted[highlightlines={8}]{\myCpp}{examples/typeid2.cpp}}<4>
-\only{\inputminted[highlightlines={9}]{\myCpp}{examples/typeid2.cpp}}<5>
-\only{\inputminted[highlightlines={10}]{\myCpp}{examples/typeid2.cpp}}<6>
-
-\uncover<4-6>{
-\begin{block}{Output:}
-\only{\alert{4Base}}<4>
-\only{\alert{0}}<5>
-\only{\alert{0x7ffe5133e4c8}}<6>
-\end{block}
-}
 
 \end{frame}
 

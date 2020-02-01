@@ -7,12 +7,10 @@ void execute(){
 }
 ~runnable(){
   unique_lock<mutex> lck(m_);
-  cv.wait(lck,
-          [this]{return done_;});
+  cv.wait(lck, 
+    [this]{return done_;});
 }
 private:
   virtual void run()=0;
-  condition_variable cv_;
-  bool done_=false;
-  mutex m_;
+  //...
 };
