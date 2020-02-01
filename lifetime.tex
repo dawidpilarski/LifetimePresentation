@@ -685,6 +685,43 @@ We cannot allow 2 complete objects of different types (not subobjects) live:
 
 \section{Pointers and std::launder}
 
+\begin{frame}{But first... values}
+\vfill
+\uncover<+->{\alert{Value} is \alert{unique} and \alert{abstract}. Noone can modify a value. (Cannot change `5' to mean `4').} 
+\vfill
+
+\uncover<+->{\alert{Objects} have value. Objects can be changed and manipulated (Object can have value `5' or `4' in different time).}
+\vfill
+
+\uncover<+->{\alert{Objects} have their representation. Usually it is a set of contiguous bytes in a memory.}
+\vfill
+
+\uncover<+->{\alert{Values} have their representations. In case of C++ it is a subset of object representation, that contributes to value.}
+\end{frame}
+
+\begin{frame}{Values and value representations}
+
+There might be \alert{multiple value representations} of the same \alert{value}.
+\vfill
+\pause
+Example:
+
+floating point \texttt{NaN} - (exponent = 0xff, mantissa != 0)
+\end{frame}
+
+\begin{frame}{Value of the pointer}
+
+Values of pointers fall into one of the following categories:
+
+\begin{itemizeSeq}
+\item pointer to an object (set of many values)
+\item pointer past an object (set of many values)
+\item invalid pointer (one value with many value representations)
+\item null pointer (one value with one representation)
+\end{itemizeSeq}
+
+\end{frame}
+
 \begin{frame}{Tricky placement new}
 
 \begin{columns}
