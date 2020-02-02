@@ -2,7 +2,8 @@
 \documentclass{panicsoftware-presentation}
 
 \usepackage{tikz}
-\usetikzlibrary{decorations.pathreplacing,patterns}
+\usetikzlibrary{decorations.pathreplacing,patterns,calc}
+\usepackage{adjustbox}
 
 \title{Lifetime of the C++ object}
 \author{Dawid Pilarski}
@@ -709,7 +710,7 @@ Example:
 floating point \texttt{NaN} - (exponent = 0xff, mantissa != 0)
 \end{frame}
 
-\begin{frame}{Value of the pointer}
+\begin{frame}{Values of pointers}
 
 Values of pointers fall into one of the following categories:
 
@@ -722,7 +723,66 @@ Values of pointers fall into one of the following categories:
 
 \end{frame}
 
-\begin{frame}{Tricky placement new}
+\begin{frame}{Pointer to an object and invalid pointers}
+
+\begin{adjustbox}{width=\linewidth}
+\begin{tikzpicture}
+\node at(-1, 0){};
+\node at(11, 0){};
+
+\only{\draw[thick, color=blue] (0,0) ellipse (0.95cm and 1.5cm);
+\node[color=blue] at(0,0) {objects};}<+->
+\only{\draw[thick, color=violet] (2.5,0) ellipse (0.95cm and 1.5cm);
+\node[color=violet, text width=1.5cm, align=center] at(2.5,0) {pointers to objects};
+
+\node (objfrom) at ($(0,0)+(60:0.95cm and 1.5cm)$){};
+\node (ptrto) at ($(2.5,0)+(120:0.95cm and 1.5cm)$){};
+\draw[thick, color=violet, ->] (objfrom) to[out=60, in=120] node[above]{1:1} (ptrto);}<+->
+
+\only{
+\draw[thick, color=magenta] (5,0) ellipse (0.95cm and 1.5cm);
+\node[text width=1.5cm, color=magenta, align=center] at(5,0) {pointer representations};
+\node (ptrfrom) at($(2.5,0)+(60:0.95cm and 1.5cm)$){};
+\node (reprsto) at($(5,0)+(120:0.95cm and 1.5cm)$){};
+\draw[thick, color=magenta, ->] (ptrfrom) to[out=60, in=120] node[above]{1:1$^{*}$} (reprsto);}<+->
+
+\only{\node[circle, fill=red!70!black, minimum size=0.25cm, label={[text width=1cm, color=red!70!black, align=center]below:invalid pointer value}] (invptr) at(10.5, 0){};}<+->
+
+\only{
+\draw[thick, color=red] (6,0) ellipse (1.95cm and 2.1cm);
+\node[text width=1.5cm, color=red, align=right] at(6.75,0) {invalid pointer representations};
+\node (invreprs) at($(6,0)+(0:1.95cm and 2.1cm)$){};
+
+\draw[thick, color=red, ->] (invptr) to[out=-180, in=0] node[above]{1:many} (invreprs);}<+->
+
+\only{
+\node[draw, color=magenta!50!red, fill=magenta!50!red, circle, minimum size=0.005cm] (common) at(5, -1.2){};
+\draw[thick, color=magenta!50!red, ->, text width=3cm, align=center] (common) to[out=-90, in=0] (3.5, -3) node[left]{valid and invalid at the same time};
+}<+->
+
+\node[left] at(11,-4) {\footnotesize *with some simplifications.};
+\end{tikzpicture}
+\end{adjustbox}
+
+\end{frame}
+
+\begin{frame}{Summary - pointers}
+
+\begin{center}
+\alert{value change => value representation change.}
+\end{center}
+
+Pointers are exception to the rule! 
+
+\vfill
+
+\begin{center}
+\alert{You can change value of the pointer without changing its value representation.}
+\end{center}
+
+\end{frame}
+
+\begin{frame}{Example:}
 
 \begin{columns}
 
@@ -797,7 +857,10 @@ constexpr T* launder(T* p) noexcept;
 
 \begin{frame}{Rules for placement new for such cases}
 
-\centerline{You can do placement new on old object with same type and keep using old object.}
+\begin{center}
+You can do placement new on old object with same type and keep using old object.
+\end{center}
+
 \pause
 \centerline{With some exceptions (until C++20). For example:}
 
