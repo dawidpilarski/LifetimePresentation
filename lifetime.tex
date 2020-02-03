@@ -291,6 +291,8 @@ Neither \texttt{X} nor \texttt{y} are variables.\\
 
 \end{frame}
 
+\section*{Limitations on objects}
+
 \begin{frame}{Limitations on objects - Storage allocated cdtor not yet called}
 
 During this phase you must treat every pointer/reference to such object as if it was raw storage.
@@ -694,7 +696,7 @@ We cannot allow 2 complete objects of different types (not subobjects) live:
 \uncover<+->{\alert{Objects} have value. Objects can be changed and manipulated (Object can have value `5' or `4' in different time).}
 \vfill
 
-\uncover<+->{\alert{Objects} have their representation. Usually it is a set of contiguous bytes in a memory.}
+\uncover<+->{\alert{Objects} have their representation - a set of contiguous bytes in a memory.}
 \vfill
 
 \uncover<+->{\alert{Values} have their representations. In case of C++ it is a subset of object representation, that contributes to value.}

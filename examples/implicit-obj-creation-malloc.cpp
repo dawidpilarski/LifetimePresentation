@@ -1,3 +1,3 @@
 struct T{/**/};
-T* ptr = (T*)
+struct T* ptr = (T*)
          malloc(sizeof(struct T));
